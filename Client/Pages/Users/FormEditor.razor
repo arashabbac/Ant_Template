@@ -1,0 +1,157 @@
+﻿@inject Services.UserService userService
+<EditForm Model="@Model" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+
+    <input type="hidden" @bind="Model.Id" />
+
+    <div class="row mb-2">
+
+        <div class="col-lg-6 col-12">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" @bind="Model.IsActive" id="defaultUnchecked">
+                <label class="custom-control-label pt-1" style="font-size:12px" for="defaultUnchecked">
+                    @Resources.DataDictionary.IsActive
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-6 col-12">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        @Resources.DataDictionary.FullName
+                    </span>
+                </div>
+                <InputText type="text" class="form-control" @bind-Value="Model.FullName" />
+            </div>
+            <ValidationMessage For="() => Model.FullName" />
+        </div>
+
+        <div class="col-lg-6 col-12">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        @Resources.DataDictionary.NationalCode
+                    </span>
+                </div>
+                <InputText type="text" class="form-control" @bind-Value="Model.NationalCode" />
+            </div>
+            <ValidationMessage For="() => Model.NationalCode" />
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-6 col-12">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        @Resources.DataDictionary.CellPhoneNumber
+                    </span>
+                </div>
+                <InputText type="text" class="form-control" @bind-Value="Model.CellPhoneNumber" />
+            </div>
+            <ValidationMessage For="() => Model.CellPhoneNumber" />
+        </div>
+
+        <div class="col-lg-6 col-12">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        @Resources.Models.User.UserType
+                    </span>
+                </div>
+                <InputSelectEnum name="@nameof(Model.Type)" class="form-control" @bind-Value="Model.Type"></InputSelectEnum>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-6 col-12">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        @Resources.DataDictionary.Username
+                    </span>
+                </div>
+                <InputText type="text" class="form-control" @bind-Value="Model.Username" />
+            </div>
+            <ValidationMessage For="() => Model.Username" />
+        </div>
+
+        <div class="col-lg-6 col-12">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        @Resources.DataDictionary.Password
+                    </span>
+                </div>
+                <InputText type="text" class="form-control" @bind-Value="Model.Password" />
+            </div>
+            <ValidationMessage For="() => Model.Password" />
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-6 col-12">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        @Resources.DataDictionary.Description
+                    </span>
+                </div>
+                <InputTextArea class="form-control" @bind-Value="Model.Description" />
+            </div>
+            <ValidationMessage For="() => Model.Description" />
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="offset-lg-6 col-lg-6 col-12 text-right">
+            <a href="/users" class="btn btn-sm btn-secondary">
+                @Resources.DataDictionary.Back
+            </a>
+            @if (Model.Id.HasValue)
+            {
+                <ButtonLoading Loading="userService.Loading"
+                               DisableButtonType="button"
+                               ButtonType="submit"
+                               Class="btn btn-sm btn-warning mx-2"
+                               Title="@Resources.DataDictionary.EditOf" />
+            }
+            else
+            {
+                <ButtonLoading Loading="userService.Loading"
+                               DisableButtonType="button"
+                               ButtonType="submit"
+                               Class="btn btn-sm btn-success mx-2"
+                               Title="@Resources.DataDictionary.Submit" />
+            }
+        </div>
+    </div>
+
+</EditForm>
+
+
+@code
+{
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+    [Parameter]
+    public ViewModels.Users.CreateViewModel Model { get; set; }
+
+    private void HandleValidSubmit()
+    {
+        OnValidSubmit.InvokeAsync(null);
+    }
+}

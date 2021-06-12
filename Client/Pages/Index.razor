@@ -1,0 +1,35 @@
+﻿@page "/"
+@inject IJSRuntime JsRuntime
+
+<div class="container mt-3">
+    <div class="card">
+        <div class="card-header">
+            کامپوننت های کاربردی
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6 col-12">
+                    <p>
+                        ورودی مبلغ:
+                    </p>
+                    <InputCurrency Value="Money" OnInput="@((decimal? value) => Money = value)" />
+                </div>
+
+                <div class="col-lg-6 col-12 mt-lg-0 mt-4">
+                    <p>
+                        ورودی تاریخ:
+                    </p>
+                    <CustomInputDate Value="DateTime" OnBlur="@((System.DateTime? dateTime) => DateTime = dateTime)" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code{
+    public decimal? Money { get; set; }
+
+    public System.DateTime? DateTime { get; set; }
+
+}

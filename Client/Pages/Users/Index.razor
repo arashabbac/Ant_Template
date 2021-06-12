@@ -1,0 +1,427 @@
+﻿@page "/users"
+@inject Services.UserService userService
+@inject SweetAlertService Swal
+@inject IJSRuntime JsRuntime
+@inject NavigationManager _navigation
+
+<div class="container mt-3">
+    <div class="accordion">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header border-bottom-0" data-toggle="collapse" data-target="#userSearch">
+                <svg width="25" height="25" viewBox="0 0 208 208" version="1.1">
+                    <g id="surface1">
+                        <path style=" stroke:none;fill-rule:nonzero;fill:#000000;fill-opacity:1;" d="M 78.789063 1.476563 C 36.070313 1.476563 1.476563 36.070313 1.476563 78.789063 C 1.476563 121.503906 36.070313 156.097656 78.789063 156.097656 C 96.824219 156.097656 113.410156 149.726563 126.554688 139.355469 L 133.445313 146.25 C 130.554688 151.699219 131.570313 158.652344 136.15625 163.238281 L 172.347656 199.679688 C 177.980469 205.308594 187.152344 205.308594 192.785156 199.679688 L 199.679688 192.785156 C 205.308594 187.152344 205.308594 177.980469 199.679688 172.347656 L 163.238281 136.15625 C 158.621094 131.539063 151.699219 130.738281 146.25 133.691406 L 139.355469 126.800781 C 149.789063 113.625 156.097656 96.914063 156.097656 78.789063 C 156.097656 36.070313 121.503906 1.476563 78.789063 1.476563 Z M 78.789063 15.757813 C 113.597656 15.757813 141.816406 43.980469 141.816406 78.789063 C 141.816406 113.597656 113.597656 141.816406 78.789063 141.816406 C 43.980469 141.816406 15.757813 113.597656 15.757813 78.789063 C 15.757813 43.980469 43.980469 15.757813 78.789063 15.757813 Z M 38.902344 58.84375 C 34.839844 65.429688 32.5 73.1875 32.5 81.496094 C 32.5 105.347656 51.734375 124.582031 75.585938 124.582031 C 84.789063 124.582031 93.4375 121.597656 100.453125 116.703125 C 98.578125 116.921875 96.484375 116.949219 94.546875 116.949219 C 63.707031 116.949219 38.902344 92.144531 38.902344 61.308594 C 38.902344 60.476563 38.871094 59.675781 38.902344 58.84375 Z " />
+                    </g>
+                </svg>
+                @Resources.DataDictionary.Search
+            </div>
+
+            <div id="userSearch" class="collapse">
+                <div class="card-body">
+                    <EditForm Model="request" OnSubmit="search">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-lg-6 col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                @Resources.DataDictionary.FullName
+                                            </span>
+                                        </div>
+                                        <InputText type="text" class="form-control" @bind-Value="request.FullName" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                @Resources.DataDictionary.Username
+                                            </span>
+                                        </div>
+                                        <InputText type="text" class="form-control" @bind-Value="request.Username" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                @Resources.DataDictionary.CellPhoneNumber
+                                            </span>
+                                        </div>
+                                        <InputText type="number" class="form-control" @bind-Value="request.CellPhoneNumber" />
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-12">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                @Resources.DataDictionary.NationalCode
+                                            </span>
+                                        </div>
+                                        <InputText type="number" class="form-control" @bind-Value="request.NationalCode" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="direction: ltr;">
+                                <div class="col-12 text-right">
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        @Resources.DataDictionary.Search
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-secondary" @onclick="reset">
+                                        @Resources.DataDictionary.Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-3">
+    <div class="card border-0 shadow-sm">
+        <div class="card-header border-bottom-0">
+            <div class="row">
+                <div class="col-lg-10 col-8">
+                    @Resources.Models.User.EntitiesName
+                </div>
+                <div class="col-lg-2 col-4 text-right">
+                    <a href="user/create" class="btn btn-sm btn-primary">
+                        @Resources.DataDictionary.CreateOf @Resources.Models.User.EntityName
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body bg-white border-0" style="border: 1px solid rgba(0, 0, 0, 0.125)">
+        @if (data.Result == null)
+        {
+            <p>
+                درحال بارگزاری
+            </p>
+        }
+        else
+        {
+            <Table Class="@_table.TableCssClass"
+                   DataSource="@data.Result"
+                   Total="data.TotalCount"
+                   PageSize="data.PageSize"
+                   Loading="@_table.Loading"
+                   OnPageIndexChange="pageIndexChanged">
+                <Column Class="@_table.ColumnCssClass" Title="@Resources.DataDictionary.IsActive" @bind-Field="@context.IsActive">
+                    <Checkbox Checked="@context.IsActive" Disabled="true" />
+                </Column>
+                <Column Class="@_table.ColumnCssClass" Title="@Resources.DataDictionary.FullName" @bind-Field="@context.FullName" />
+                <Column Class="@_table.ColumnCssClass" Title="@Resources.Models.User.UserType" Field="@context.UserType">
+                    @if (context.UserType == ViewModels.Enums.UserType.Programmer)
+                    {
+                        <Tag Color="volcano">@context.UserTypeValue</Tag>
+                    }
+                    else if (context.UserType == ViewModels.Enums.UserType.Owner)
+                    {
+                        <Tag Color="geekblue">@context.UserTypeValue</Tag>
+                    }
+                    else if (context.UserType == ViewModels.Enums.UserType.SuperUser)
+                    {
+                        <Tag Color="green">@context.UserTypeValue</Tag>
+                    }
+                    else
+                    {
+                        <Tag Color="yellow">@context.UserTypeValue</Tag>
+                    }
+                </Column>
+                <Column Class="@_table.ColumnCssClass" Title="@Resources.DataDictionary.Action" @bind-Field="@context.Id">
+
+                    <a href="/user/edit/@context.Id" tooltip="@(Resources.DataDictionary.EditOf)">
+                        <svg width="20" height="20" viewBox="0 0 480 480" version="1.1">
+                            <g id="surface1">
+                                <path style=" stroke:none;fill-rule:nonzero;fill:#FF9800;fill-opacity:1;" d="M 79.683594 290.007813 L 330 39.695313 L 440.304688 150.003906 L 189.992188 400.316406 Z " />
+                                <path style=" stroke:none;fill-rule:nonzero;fill:#FFC107;fill-opacity:1;" d="M 80 290 L 40 440 L 190 400 Z " />
+                                <path style=" stroke:none;fill-rule:nonzero;fill:#455A64;fill-opacity:1;" d="M 60 366 L 40 440 L 114 420 Z " />
+                            </g>
+                        </svg>
+                    </a>
+
+                    <a @onclick="() => showDeleteAlert(context.Id)" tooltip="@(Resources.DataDictionary.Delete)">
+                        <svg width="20" height="20" viewBox="0 0 48 48">
+                            <path fill="#f44336" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z" />
+                            <path fill="#fff" d="M29.656,15.516l2.828,2.828l-14.14,14.14l-2.828-2.828L29.656,15.516z" />
+                            <path fill="#fff" d="M32.484,29.656l-2.828,2.828l-14.14-14.14l2.828-2.828L32.484,29.656z" />
+                        </svg>
+                    </a>
+
+                    <a data-toggle="modal" data-target="#moreinfo" @onclick="() => ShowInfo(context.Id)" tooltip="@(Resources.DataDictionary.Information)">
+                        <svg width="20" height="20" viewBox="0 0 480 480" version="1.1">
+                            <g id="surface1">
+                                <path style=" stroke:none;fill-rule:nonzero;fill:#2196F3;fill-opacity:1;" d="M 440 240 C 440 350.449219 350.449219 440 240 440 C 129.550781 440 40 350.449219 40 240 C 40 129.550781 129.550781 40 240 40 C 350.449219 40 440 129.550781 440 240 Z " />
+                                <path style=" stroke:none;fill-rule:nonzero;fill:#FFFFFF;fill-opacity:1;" d="M 220 220 L 260 220 L 260 330 L 220 330 Z " />
+                                <path style=" stroke:none;fill-rule:nonzero;fill:#FFFFFF;fill-opacity:1;" d="M 265 165 C 265 178.789063 253.789063 190 240 190 C 226.210938 190 215 178.789063 215 165 C 215 151.210938 226.210938 140 240 140 C 253.789063 140 265 151.210938 265 165 Z " />
+                            </g>
+                        </svg>
+                    </a>
+                </Column>
+            </Table>
+        }
+
+    </div>
+</div>
+
+<div class="modal fade px-md-0 px-3 " id="moreinfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body mt-3">
+                <div class="container">
+                    @if (UserViewModel != null)
+                    {
+                    <div class="row">
+
+                        <div class="col-12 my-2">
+                            <h6>
+                                <svg width="25" height="25" viewBox="0 0 480 480" version="1.1">
+                                    <g id="surface1">
+                                        <path style=" stroke:none;fill-rule:nonzero;fill:#2196F3;fill-opacity:1;" d="M 440 240 C 440 350.449219 350.449219 440 240 440 C 129.550781 440 40 350.449219 40 240 C 40 129.550781 129.550781 40 240 40 C 350.449219 40 440 129.550781 440 240 Z " />
+                                        <path style=" stroke:none;fill-rule:nonzero;fill:#FFFFFF;fill-opacity:1;" d="M 220 220 L 260 220 L 260 330 L 220 330 Z " />
+                                        <path style=" stroke:none;fill-rule:nonzero;fill:#FFFFFF;fill-opacity:1;" d="M 265 165 C 265 178.789063 253.789063 190 240 190 C 226.210938 190 215 178.789063 215 165 C 215 151.210938 226.210938 140 240 140 C 253.789063 140 265 151.210938 265 165 Z " />
+                                    </g>
+                                </svg>
+                                @Resources.DataDictionary.Information @Resources.Models.User.EntityName
+                            </h6>
+                        </div>
+
+                        <div class="col-md-6 col-12">
+                            <p>
+                                @Resources.DataDictionary.IsActive:
+                                <span>
+                                    @if (UserViewModel.IsActive)
+                                    {
+                                        <Tag Color="green">فعال</Tag>
+                                    }
+                                    else
+                                    {
+                                        <Tag Color="red">غیرفعال</Tag>
+                                    }
+                                </span>
+                            </p>
+                        </div>
+
+                        <div class="col-md-6 col-12">
+                            <p>
+                                @Resources.DataDictionary.FullName:
+                                <span>
+                                    @UserViewModel.FullName
+                                </span>
+                            </p>
+                        </div>
+
+                        <div class="col-md-6 col-12">
+                            <p>
+                                @Resources.DataDictionary.CellPhoneNumber:
+                                <span>
+                                    @Dtx.Text.Convert.DisplayNumber(UserViewModel.CellPhoneNumber)
+                                </span>
+                            </p>
+                        </div>
+
+                        <div class="col-md-6 col-12">
+                            <p>
+                                @Resources.DataDictionary.NationalCode:
+                                <span>
+                                    @Dtx.Text.Convert.DisplayNumber(UserViewModel.NationalCode)
+                                </span>
+                            </p>
+                        </div>
+
+                        <div class="col-md-6 col-12">
+                            <p>
+                                @Resources.DataDictionary.Username:
+                                <span>
+                                    @UserViewModel.Username
+                                </span>
+                            </p>
+                        </div>
+
+
+                        <div class="col-md-6 col-12">
+                            <p>
+                                @Resources.Models.User.UserType:
+                                <span>
+                                    @if (UserViewModel.Type == ViewModels.Enums.UserType.Programmer)
+                                    {
+                                        <Tag Color="volcano">
+                                            @Resources.DataDictionary.Programmer
+                                        </Tag>
+                                    }
+                                    else if (UserViewModel.Type == ViewModels.Enums.UserType.Owner)
+                                    {
+                                        <Tag Color="geekblue">
+                                            @Resources.DataDictionary.Owner
+                                        </Tag>
+                                    }
+                                    else if (UserViewModel.Type == ViewModels.Enums.UserType.SuperUser)
+                                    {
+                                        <Tag Color="green">
+                                            @Resources.DataDictionary.SuperUser
+                                        </Tag>
+                                    }
+                                    else
+                                    {
+                                        <Tag Color="yellow">
+                                            @Resources.DataDictionary.User
+                                        </Tag>
+                                    }
+                                </span>
+                            </p>
+                        </div>
+
+                        <div class="col-md-6 col-12">
+                            <p>
+                                @Resources.DataDictionary.Description:
+                                <span>
+                                    @UserViewModel.Description
+                                </span>
+                            </p>
+                        </div>
+
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    public ViewModels.ViewPagingDataResult<ViewModels.Users.GetAllViewModel> data { get; set; }
+
+    public ViewModels.Users.GetAllRequestViewModel request { get; set; }
+    public ViewModels.Users.UserViewModel UserViewModel { get; set; }
+
+    Infrastructure.TableConfig<ViewModels.Users.GetAllViewModel> _table;
+
+    protected override async Task OnInitializedAsync()
+    {
+        data = new ViewModels.ViewPagingDataResult<ViewModels.Users.GetAllViewModel>();
+        request = new ViewModels.Users.GetAllRequestViewModel();
+        UserViewModel = new ViewModels.Users.UserViewModel();
+        _table = new Infrastructure.TableConfig<ViewModels.Users.GetAllViewModel>();
+
+
+        _url = _navigation.Uri;
+        _navigation.LocationChanged += LocationChanged;
+        LoadTableParameter();
+        await loadDataAsync();
+    }
+
+    #region DataGrid With Paging Url
+
+    string _url;
+    int _pageIndex;
+    int _pageSize;
+    private void pageIndexChanged(PaginationEventArgs args)
+    {
+        _navigation.NavigateTo($"users?page={args.Page}");
+    }
+
+    private void LoadTableParameter()
+    {
+        var uri = _navigation.ToAbsoluteUri(_url);
+        var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+        _pageIndex = int.TryParse(query["page"], out var index) ? index > 0 ? index : 1 : 1;
+        _pageSize = request.PageSize;
+    }
+
+    private async Task loadDataAsync()
+    {
+        _table.Loading = true;
+        StateHasChanged();
+        request.PageIndex = _pageIndex - 1;
+        request.PageSize = _pageSize;
+        data = await userService.GetAllAsync(request);
+        _table.Loading = false;
+        StateHasChanged();
+    }
+
+    private async void LocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        if (e.IsNavigationIntercepted)
+        {
+            return;
+        }
+
+        _url = e.Location;
+        LoadTableParameter();
+        await loadDataAsync();
+    }
+    #endregion
+
+    #region Datagrid Config without page Url
+    //private async Task pageIndexChanged(PaginationEventArgs args)
+    //{
+    //    request.PageIndex = args.Page - 1;
+    //    request.PageSize = args.PageSize;
+
+    //    await loadDataAsync();
+    //}
+
+    //private async Task loadDataAsync()
+    //{
+    //    _table.Loading = true;
+    //    data = await userService.GetAllAsync(request);
+    //    _table.Loading = false;
+    //}
+    #endregion
+
+    async Task reset()
+    {
+        request = new ViewModels.Users.GetAllRequestViewModel();
+        await loadDataAsync();
+    }
+
+    async Task search()
+    {
+        await loadDataAsync();
+    }
+
+    #region UserInfo PopUp
+    async Task ShowInfo(System.Guid userId)
+    {
+        UserViewModel = new ViewModels.Users.UserViewModel();
+        UserViewModel = await userService.GetByIdAsync(userId);
+    }
+    #endregion
+
+    #region Delete User
+    private async Task showDeleteAlert(System.Guid companyId)
+    {
+        SweetAlertResult result =
+
+            await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = Resources.DataDictionary.AreYouSure,
+                Icon = SweetAlertIcon.Question,
+                ShowCancelButton = true,
+                CancelButtonText = Resources.DataDictionary.Cancel,
+                ShowConfirmButton = false,
+                ShowDenyButton = true,
+                DenyButtonText = Resources.DataDictionary.Delete,
+                DenyButtonColor = "var(--danger)",
+            });
+
+        if (string.IsNullOrWhiteSpace(result.Value) == false)
+        {
+            await DeleteSharesAsync(companyId);
+        }
+
+    }
+
+    async Task DeleteSharesAsync(System.Guid userId)
+    {
+        await userService.DeleteByIdAsync(userId);
+
+        await loadDataAsync();
+    }
+    #endregion
+}

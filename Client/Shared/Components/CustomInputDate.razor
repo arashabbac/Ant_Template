@@ -1,0 +1,59 @@
+﻿@if (Dtx.Globalization.CultureInfo.GetCurrentCulture() == Dtx.Globalization.Cultures.Farsi ||
+  ForcePersianUse == true)
+{
+    var persianValue = Dtx.Calendar.Convert.CivilToPersion(Value)?.Value1;
+    <input type="text" id="@Name" class="form-control datepicker" value="@persianValue" readonly @onblur="setValue" />
+}
+else
+{
+    <InputDate id="@Name" class="form-control" @bind-Value="_dateValue" @onblur="setValue" />
+}
+
+@code {
+
+    [Parameter]
+    public EventCallback<DateTime?> OnBlur { get; set; }
+
+    [Parameter]
+    public bool ForcePersianUse { get; set; }
+
+    [Parameter]
+    public DateTime? Value { get; set; }
+
+    private static string _stringValue;
+
+    private DateTime _dateValue;
+
+    [Parameter]
+    public string Name { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await JsRuntime.InvokeVoidAsync("includeDatePicker");
+
+        if (Value.HasValue == true)
+        {
+            _dateValue = Value.Value;
+        }
+    }
+
+    [JSInvokable]
+    public static void SetInputDateValue(string stringValue)
+    {
+        _stringValue = stringValue;
+    }
+
+    private async Task setValue()
+    {
+        if (Dtx.Globalization.CultureInfo.GetCurrentCulture() == Dtx.Globalization.Cultures.Farsi &&
+        !string.IsNullOrWhiteSpace(_stringValue))
+        {
+            var date = Dtx.Calendar.Convert.PersionToCivil(_stringValue);
+            await OnBlur.InvokeAsync(date);
+        }
+        else
+        {
+            await OnBlur.InvokeAsync(_dateValue);
+        }
+    }
+}

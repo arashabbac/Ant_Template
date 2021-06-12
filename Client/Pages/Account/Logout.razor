@@ -1,0 +1,11 @@
+﻿@page "/logout"
+@inject Services.TokenService tokenService
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await tokenService.RemoveAsync();
+    }
+
+}

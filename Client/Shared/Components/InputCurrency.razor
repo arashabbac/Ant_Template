@@ -1,0 +1,66 @@
+﻿
+<input 
+       maxlength="24"
+       class="@Class" 
+       onkeypress="return /[0-9]/i.test(event.key)"
+       @bind="ShowValue"
+       @onblur="OnBlur"
+       @bind:event="oninput"
+       @onkeyup="updateShowValue"
+       />
+
+<small class="mt-2 text-dark">
+    @Dtx.Text.Convert.DisplayFormattedNumber(_value)
+    ریال
+</small>
+
+<input type="hidden" @bind="_value" @oninput="onInput" />
+
+@code {
+
+    public string ShowValue { get; set; }
+
+    [Parameter]
+    public string Class { get; set; } = "form-control";
+
+    [Parameter]
+    public EventCallback<decimal?> OnInput { get; set; }
+
+    [Parameter]
+    public EventCallback<FocusEventArgs> OnBlur { get; set; }
+
+    [Parameter]
+    public decimal? Value { get; set; }
+
+    private decimal? _value;
+
+
+    private async Task updateShowValue()
+    {
+
+        if (string.IsNullOrEmpty(ShowValue) == false)
+        {
+            ShowValue = decimal.Parse(ShowValue.Replace(",", "")).ToString("#,##0");
+        }
+
+        if (string.IsNullOrWhiteSpace(ShowValue) == false)
+        {
+            _value = decimal.Parse(ShowValue.Replace(",", ""));
+            await onInput();
+        }
+        else
+        {
+            _value = null;
+        }
+
+    }
+
+    private async Task onInput()
+    {
+        if(_value != null)
+        {
+            await OnInput.InvokeAsync(_value);
+        }
+    }
+
+}

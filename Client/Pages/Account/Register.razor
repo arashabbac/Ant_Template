@@ -1,0 +1,134 @@
+﻿@page "/register"
+@inject Services.AccountService accountService
+
+<EditForm Model="Model" OnValidSubmit="Registersubmit">
+    <DataAnnotationsValidator />
+
+    <h1>
+        @Resources.DataDictionary.Register
+    </h1>
+    <p class="signup-link register">
+        @Resources.DataDictionary.LoginToAccount
+        <a href="/login" style="text-decoration:none;">
+            @Resources.DataDictionary.Login
+        </a>
+    </p>
+
+    <div class="form">
+
+
+        <div class="field-wrapper input my-2">
+            <div class="d-flex justify-content-between">
+                @Resources.DataDictionary.FullName
+            </div>
+            <InputText name="@nameof(Resources.DataDictionary.FullName)"
+                       @bind-Value="Model.FullName"
+                       autpcomplete="off"
+                       class="form-control"
+                       placeholder="@Resources.DataDictionary.FullName" />
+            <div class="text-danger text-left">
+                <ValidationMessage For="(() => Model.FullName)"></ValidationMessage>
+            </div>
+        </div>
+
+        <div class="field-wrapper input my-2">
+            <div class="d-flex justify-content-between">
+                @Resources.DataDictionary.CellPhoneNumber
+            </div>
+            <InputText name="@nameof(Resources.DataDictionary.CellPhoneNumber)"
+                       @bind-Value="Model.CellPhoneNumber"
+                       class="form-control"
+                       autocomplete="off"
+                       placeholder="@Resources.DataDictionary.CellPhoneNumber" />
+            <div class="text-danger text-left">
+                <ValidationMessage For="(() => Model.CellPhoneNumber)"></ValidationMessage>
+            </div>
+        </div>
+
+        <div class="field-wrapper input my-2">
+            <div class="d-flex justify-content-between">
+                @Resources.DataDictionary.Username
+            </div>
+            <InputText name="@nameof(Resources.DataDictionary.Username)"
+                       autpcomplete="off"
+                       class="form-control"
+                       @bind-Value="Model.Username"
+                       placeholder="@Resources.DataDictionary.Username" />
+            <div class="text-danger text-left">
+                <ValidationMessage For="(() => Model.Username)"></ValidationMessage>
+            </div>
+        </div>
+
+        <div class="field-wrapper input my-2">
+            <div class="d-flex justify-content-between">
+                @Resources.DataDictionary.Password
+            </div>
+            <InputText name="@nameof(Resources.DataDictionary.Password)"
+                       autpcomplete="off"
+                       type="password"
+                       @bind-Value="Model.Password"
+                       class="form-control"
+                       autocomplete="off"
+                       placeholder="@Resources.DataDictionary.Password" />
+            <div class="text-danger text-left">
+                <ValidationMessage For="(() => Model.Password)"></ValidationMessage>
+            </div>
+        </div>
+
+        <div class="field-wrapper input my-2">
+            <div class="d-flex justify-content-between">
+                @Resources.DataDictionary.ConfirmPassword
+            </div>
+            <InputText name="@nameof(Resources.DataDictionary.ConfirmPassword)"
+                       type="password" @bind-Value="Model.ConfirmPassword"
+                       autpcomplete="off"
+                       class="form-control"
+                       autocomplete="off"
+                       placeholder="@Resources.DataDictionary.ConfirmPassword" />
+
+            <div class="text-danger text-left">
+                <ValidationMessage For="(() => Model.ConfirmPassword)"></ValidationMessage>
+            </div>
+        </div>
+
+        <div class="d-sm-flex justify-content-between">
+            <div class="field-wrapper">
+                @if (loading)
+                {
+                    <div class="spinner-border-sm"></div>
+                }
+                else
+                {
+                    <button type="submit" class="btn" style="background-color:#192a56;color:#fff">
+                        @Resources.DataDictionary.Register
+                    </button>
+                }
+            </div>
+        </div>
+
+    </div>
+
+
+</EditForm>
+
+
+@code {
+
+    public ViewModels.Users.RegisterViewModel Model { get; set; }
+    private bool loading = false;
+
+    protected override void OnInitialized()
+    {
+        Model = new ViewModels.Users.RegisterViewModel();
+    }
+
+    private async System.Threading.Tasks.Task Registersubmit()
+    {
+        loading = true;
+
+        await accountService.RegisterAsync(Model);
+
+        loading = false;
+    }
+
+}

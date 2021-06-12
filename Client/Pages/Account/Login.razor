@@ -1,0 +1,89 @@
+﻿@page "/login"
+
+@inject Services.AccountService accountService
+@inject SweetAlertService Swal
+
+
+<EditForm Model="Model" OnValidSubmit="LoginSubmit">
+
+    <DataAnnotationsValidator />
+
+    <h5 class="mb-4 font-weight-bold">
+        @Resources.DataDictionary.LoginToAccount
+    </h5>
+
+    <div class="text-left">
+        <div class="form">
+
+            <div id="username-field" class="field-wrapper input">
+                <label for="username">
+                    @Resources.DataDictionary.Username
+                </label>
+                <InputText name="@nameof(Model.Username)"
+                           @bind-Value="Model.Username"
+                           class="form-control"
+                           autocomplete="off"
+                           placeholder="@Resources.DataDictionary.Username" />
+                <ValidationMessage For="(() => Model.Username)"></ValidationMessage>
+            </div>
+
+            <div id="password-field" class="field-wrapper input mb-2">
+                <div class="d-flex justify-content-between">
+                    <label for="password">
+                        @Resources.DataDictionary.Password
+                    </label>
+                </div>
+                <input name="@nameof(Model.Password)"
+                       type="password"
+                       @bind="Model.Password"
+                       class="form-control"
+                       autocomplete="off"
+                       placeholder="@Resources.DataDictionary.Password" />
+                <ValidationMessage For="(() => Model.Password)"></ValidationMessage>
+            </div>
+
+            <div class="d-sm-flex justify-content-between">
+                <div class="field-wrapper">
+                    @if (loading)
+                    {
+                        <Spinner></Spinner>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn" style="background-color:#192a56;color:#fff">
+                            @Resources.DataDictionary.Login
+                        </button>
+                    }
+                </div>
+            </div>
+
+            <div class="text-right mt-4">
+                <a href="/register" class="registerLink">
+                    @Resources.DataDictionary.Register
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</EditForm>
+
+@code {
+
+    public ViewModels.Users.LoginRequestViewModel Model { get; set; }
+    private bool loading = false;
+    protected override void OnInitialized()
+    {
+        Model = new ViewModels.Users.LoginRequestViewModel();
+    }
+
+    private async Task LoginSubmit()
+    {
+        loading = true;
+
+        await accountService.LoginAsync(Model);
+
+        loading = false;
+    }
+
+}

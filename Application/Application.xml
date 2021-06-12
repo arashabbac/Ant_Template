@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Application</name>
+    </assembly>
+    <members>
+        <member name="M:Application.Controllers.AccountsController.Register(ViewModels.Users.RegisterViewModel)">
+            <summary>  
+            Register new user
+            </summary>  
+            <param name="user">Model to add a new user</param>  
+            <returns></returns>  
+            <response code="200">Returned if the user was created</response>  
+        </member>
+        <member name="M:Application.Controllers.AccountsController.Login(ViewModels.Users.LoginRequestViewModel)">
+            <summary>  
+            Login user
+            </summary>  
+            <param name="login">Model to login user</param>  
+            <returns></returns>  
+            <response code="200">Returned login user</response>  
+        </member>
+        <member name="M:Application.Controllers.AccountsController.ChangePassword(ViewModels.Account.ChangePasswordViewModel)">
+            <summary>  
+            Change password
+            </summary>  
+            <param name="user">viewModel to change password</param>  
+            <returns></returns>  
+            <response code="200">Returned if the password was updated</response>  
+        </member>
+        <member name="M:Application.Controllers.AccountsController.Edit(ViewModels.Account.AccountInformationViewModel)">
+            <summary>  
+            Edit user
+            </summary>  
+            <param name="user">viewModel to edit user</param>  
+            <returns></returns>  
+            <response code="200">Returned if the user was updated</response>  
+        </member>
+        <member name="M:Application.Controllers.UsersController.GetById(System.Nullable{System.Guid})">
+            <summary>  
+            Get user by id
+            </summary>  
+            <param name="userId">user id to get user</param>  
+            <returns></returns>  
+            <response code="200">Returned if the user is exists</response>  
+        </member>
+        <member name="M:Application.Controllers.UsersController.Create(ViewModels.Users.CreateViewModel)">
+            <summary>  
+            Insert new user
+            </summary>  
+            <param name="user">viewModel to create a new user</param>  
+            <returns></returns>  
+            <response code="200">Returned if the user was created</response>  
+            <response code="400">Returned if the viewModel is null or is not valid</response>  
+            <response code="409">Returned when the user is exists</response>
+        </member>
+        <member name="M:Application.Controllers.UsersController.Edit(ViewModels.Users.CreateViewModel)">
+            <summary>  
+            Edit user
+            </summary>  
+            <param name="user">Model to edit user</param>  
+            <returns></returns>  
+            <response code="200">Returned if the user was updated</response>  
+        </member>
+        <member name="M:Application.Controllers.UsersController.GetAll(ViewModels.Users.GetAllRequestViewModel)">
+            <summary>  
+            Get all users
+            </summary>  
+            <param name="request">Model of ViewDataRequest</param>  
+            <returns></returns>  
+            <response code="200">Returned if get users success</response>
+        </member>
+        <member name="M:Application.Controllers.UsersController.Delete(System.Nullable{System.Guid})">
+            <summary>  
+            Delete user by id
+            </summary>  
+            <param name="userId">user id to get user</param>  
+            <returns></returns>  
+            <response code="200">Returned if the user is deleted</response>  
+        </member>
+    </members>
+</doc>

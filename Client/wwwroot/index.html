@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>
+        داشبورد
+    </title>
+    <link rel="icon" type="image/png" href="">
+    <base href="/" />
+    <link href="css/bootstrap/bootstrap.css" rel="stylesheet" />
+    <link href="_content/AntDesign/css/ant-design-blazor.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="lib/jquery-toast-plugin/jquery.toast.min.css" rel="stylesheet" />
+    <link href="/datepicker/persian-datepicker.css" rel="stylesheet" />
+    <link href="manifest.json" rel="manifest" />
+
+</head>
+
+<body>
+    <app>
+        <div class="page-loading-warp">
+            <div class="ant-spin ant-spin-lg ant-spin-spinning">
+                <span class="ant-spin-dot ant-spin-dot-spin">
+                    <i class="ant-spin-dot-item"></i>
+                    <i class="ant-spin-dot-item"></i>
+                    <i class="ant-spin-dot-item"></i>
+                    <i class="ant-spin-dot-item"></i>
+                </span>
+            </div>
+        </div>
+    </app>
+
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="jquery/dist/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="lib/jquery-toast-plugin/jquery.toast.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="_content/AntDesign/js/ant-design-blazor.js"></script>
+    <script src="_content/CurrieTechnologies.Razor.SweetAlert2/sweetAlert2.min.js"></script>
+
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
+</body>
+
+</html>
+

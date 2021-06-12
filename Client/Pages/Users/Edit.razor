@@ -1,0 +1,51 @@
+﻿@page "/user/edit/{id:guid}"
+@inject Services.UserService userService
+
+<div class="container mt-3">
+    <div class="card border-0 shadow-sm">
+        <div class="card-header border-bottom-0">
+            @Resources.DataDictionary.EditOf @Resources.Models.User.EntityName
+        </div>
+    </div>
+    <div class="card-body bg-white border-0">
+        <FormEditor Model="Model" OnValidSubmit="Submit" />
+    </div>
+</div>
+
+@code{
+    public ViewModels.Users.CreateViewModel Model { get; set; }
+
+    public ViewModels.Users.UserViewModel UserViewModel { get; set; }
+
+    [Parameter]
+    public System.Guid Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model =
+            new ViewModels.Users.CreateViewModel();
+        UserViewModel =
+            new ViewModels.Users.UserViewModel();
+
+        UserViewModel =
+            await userService.GetByIdAsync(userid: Id);
+
+        if(UserViewModel != null)
+        {
+            Model.Id = UserViewModel.Id;
+            Model.FullName = UserViewModel.FullName;
+            Model.Username = UserViewModel.Username;
+            Model.Type = UserViewModel.Type;
+            Model.Description = UserViewModel.Description;
+            Model.IsActive = UserViewModel.IsActive;
+            Model.CellPhoneNumber = UserViewModel.CellPhoneNumber;
+            Model.NationalCode = UserViewModel.NationalCode;
+        }
+    }
+
+    async Task Submit()
+    {
+        await userService.EditAsync(Model);
+    }
+
+}

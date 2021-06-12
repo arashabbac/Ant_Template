@@ -1,0 +1,91 @@
+﻿@inject Services.AccountService accountService
+
+<EditForm Model="@Model" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+
+    <div class="row">
+        @*<input type="hidden" @bind="Model.Id" />*@
+        <div class="col-lg-6 col-12">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        @Resources.DataDictionary.FullName
+                    </span>
+                </div>
+                <InputText type="text" class="form-control" @bind-Value="Model.FullName" />
+            </div>
+            <ValidationMessage For="() => Model.FullName" />
+        </div>
+
+        @*<div class="col-lg-6 col-12">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        @Resources.DataDictionary.Username
+                    </span>
+                </div>
+                <InputText type="text" class="form-control" @bind-Value="Model.Username" />
+            </div>
+            <ValidationMessage For="() => Model.Username" />
+        </div>*@
+
+        <div class="col-lg-6 col-12">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        @Resources.DataDictionary.NationalCode
+                    </span>
+                </div>
+                <InputText type="text" class="form-control" @bind-Value="Model.NationalCode" />
+            </div>
+            <ValidationMessage For="() => Model.NationalCode" />
+        </div>
+
+        <div class="col-lg-6 col-12">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        @Resources.DataDictionary.CellPhoneNumber
+                    </span>
+                </div>
+                <InputText type="text" class="form-control" @bind-Value="Model.CellPhoneNumber" />
+            </div>
+            <ValidationMessage For="() => Model.CellPhoneNumber" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="offset-lg-6 col-lg-6 col-12 text-right">
+            <ButtonLoading 
+                           Title="@Resources.DataDictionary.Change"
+                           ButtonType="submit"
+                           DisableButtonType="button"
+                           Class="btn btn-sm btn-warning px-3"
+                           Loading="accountService.putLoading"/>
+        </div>
+    </div>
+
+</EditForm>
+
+
+@code
+{
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
+    [Parameter]
+    public ViewModels.Account.AccountInformationViewModel Model { get; set; }
+
+
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
+
+    private void HandleValidSubmit()
+    {
+        OnValidSubmit.InvokeAsync(null);
+    }
+
+
+}

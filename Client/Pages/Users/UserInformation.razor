@@ -1,0 +1,87 @@
+﻿@page "/user/info"
+
+@layout MainLayout
+@inject Services.TokenService tokenService
+@inject Services.UserService userService
+@inject Services.AccountService accountService
+
+<div class="container mt-3">
+    <div class="card border-0 shadow-sm">
+        <div class="card-header border-bottom-0">
+            @Resources.DataDictionary.Information @Resources.Models.User.EntityName
+        </div>
+    </div>
+    <div class="card-body bg-white border-0">
+        <UserInformationForm Model="AccountModel" OnValidSubmit="ChangeAccountInformationAsync" />
+    </div>
+</div>
+
+<div class="container mt-3">
+    <div class="accordion">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header border-bottom-0" data-toggle="collapse" data-target="#changePassword">
+                <svg width="25" height="25" viewBox="0 0 480 480" version="1.1">
+                    <g id="surface1">
+                        <path style=" stroke:none;fill-rule:nonzero;fill:#00ACC1;fill-opacity:1;" d="M 420 60 L 60 60 C 48.960938 60 40 68.960938 40 80 L 40 200 C 40 211.039063 48.960938 220 60 220 L 420 220 C 431.039063 220 440 211.039063 440 200 L 440 80 C 440 68.960938 431.039063 60 420 60 Z " />
+                        <path style=" stroke:none;fill-rule:nonzero;fill:#4DD0E1;fill-opacity:1;" d="M 60 80 L 420 80 L 420 200 L 60 200 Z " />
+                        <path style=" stroke:none;fill-rule:nonzero;fill:#FFFFFF;fill-opacity:1;" d="M 230 140 C 230 156.570313 216.570313 170 200 170 C 183.429688 170 170 156.570313 170 140 C 170 123.429688 183.429688 110 200 110 C 216.570313 110 230 123.429688 230 140 Z " />
+                        <path style=" stroke:none;fill-rule:nonzero;fill:#FFFFFF;fill-opacity:1;" d="M 150 140 C 150 156.570313 136.570313 170 120 170 C 103.429688 170 90 156.570313 90 140 C 90 123.429688 103.429688 110 120 110 C 136.570313 110 150 123.429688 150 140 Z " />
+                        <path style=" stroke:none;fill-rule:nonzero;fill:#FFFFFF;fill-opacity:1;" d="M 390 140 C 390 156.570313 376.570313 170 360 170 C 343.429688 170 330 156.570313 330 140 C 330 123.429688 343.429688 110 360 110 C 376.570313 110 390 123.429688 390 140 Z " />
+                        <path style=" stroke:none;fill-rule:nonzero;fill:#FFFFFF;fill-opacity:1;" d="M 310 140 C 310 156.570313 296.570313 170 280 170 C 263.429688 170 250 156.570313 250 140 C 250 123.429688 263.429688 110 280 110 C 296.570313 110 310 123.429688 310 140 Z " />
+                        <path style=" stroke:none;fill-rule:nonzero;fill:#0097A7;fill-opacity:1;" d="M 265.710938 290 L 220 330 L 220 250 Z " />
+                        <path style=" stroke:none;fill-rule:nonzero;fill:#0097A7;fill-opacity:1;" d="M 180 350 C 180 377.609375 202.378906 400 230 400 C 257.621094 400 280 377.609375 280 350 C 280 342.101563 278.011719 334.738281 274.75 328.101563 L 289.539063 313.308594 C 296.128906 323.988281 300 336.53125 300 350 C 300 388.660156 268.660156 420 230 420 C 191.339844 420 160 388.660156 160 350 C 160 311.339844 191.339844 280 230 280 L 230 300 C 202.378906 300 180 322.371094 180 350 Z " />
+                    </g>
+                </svg>
+                @Resources.DataDictionary.Change @Resources.DataDictionary.Password
+            </div>
+
+            <div id="changePassword" class="collapse">
+                <div class="card-body">
+                    <ChangePasswordForm Model="ChangePasswordModel" OnValidSubmit="ChangePasswordAsync"></ChangePasswordForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    public ViewModels.Account.AccountInformationViewModel AccountModel { get; set; }
+
+    public ViewModels.Account.ChangePasswordViewModel ChangePasswordModel { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        AccountModel =
+            new ViewModels.Account.AccountInformationViewModel();
+
+        ChangePasswordModel =
+            new ViewModels.Account.ChangePasswordViewModel();
+
+        var currentUser =
+            await tokenService.GetUserAsync();
+
+        var user =
+            await userService.GetByIdAsync(currentUser.Id);
+
+        if(user != null)
+        {
+            AccountModel.FullName = user.FullName;
+            AccountModel.NationalCode = user.NationalCode;
+            AccountModel.CellPhoneNumber = user.CellPhoneNumber;
+            //AccountModel.Id = user.Id;
+            //AccountModel.Username = user.Username;
+            ChangePasswordModel.Password = user.Password;
+        }
+    }
+
+    async Task ChangeAccountInformationAsync()
+    {
+        await accountService.EditAsync(AccountModel);
+    }
+
+    async Task ChangePasswordAsync()
+    {
+        await accountService.ChangePasswordAsync(ChangePasswordModel);
+        ChangePasswordModel = new ViewModels.Account.ChangePasswordViewModel();
+    }
+}

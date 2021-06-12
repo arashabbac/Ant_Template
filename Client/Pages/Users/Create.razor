@@ -1,0 +1,29 @@
+﻿@page "/user/create"
+@inject Services.UserService userService
+
+<div class="container mt-3">
+    <div class="card border-0 shadow-sm">
+        <div class="card-header border-bottom-0">
+            @Resources.DataDictionary.CreateOf @Resources.Models.User.EntityName
+        </div>
+    </div>
+    <div class="card-body bg-white border-0">
+        <FormEditor Model="Model" OnValidSubmit="Submit" />
+    </div>
+</div>
+
+@code{
+    public ViewModels.Users.CreateViewModel Model { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Model =
+            new ViewModels.Users.CreateViewModel();
+    }
+
+    async Task Submit()
+    {
+        await userService.CreateAsync(Model);
+    }
+
+}

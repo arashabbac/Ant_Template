@@ -1,0 +1,38 @@
+﻿@if (Loading)
+{
+    <button type="@DisableButtonType" class="@Class" disabled>
+        <Spinner BSClassColor="@SpinnerColor" />
+        @Title
+    </button>
+}
+else
+{
+    <button type="@ButtonType" class="@Class" @onclick="OnClickCallBack">
+        @Title
+    </button>
+}
+
+
+@code {
+    [Parameter]
+    public bool Loading { get; set; } = false;
+
+    [Parameter]
+    public string Title { get; set; } = "Title Not Set!";
+
+    [Parameter]
+    public string DisableButtonType { get; set; } = "button";
+
+    [Parameter]
+    public string ButtonType { get; set; } = "submit";
+
+    [Parameter]
+    public string Class { get; set; } = "btn btn-primary mx-2";
+
+    [Parameter]
+    public string SpinnerColor { get; set; } = "text-light";
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClickCallBack { get; set; }
+
+}

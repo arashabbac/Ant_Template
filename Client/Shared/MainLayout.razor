@@ -1,0 +1,62 @@
+﻿@inherits LayoutComponentBase
+@inject Services.TokenService tokenService
+
+<MainNav CollapseSideBar="((e) => CollapseSideNav(e))"></MainNav>
+
+@if (!_collapseSideBar)
+{
+    <div class="main-container" id="container">
+
+        <div class="overlay"></div>
+        <div class="search-overlay"></div>
+
+        <SideBar></SideBar>
+        <div id="content" class="main-content">
+            <Notification></Notification>
+            @Body
+        </div>
+
+    </div>
+}
+else
+{
+    <div class="main-container sidebar-closed sbar-open" id="container">
+
+        <div class="overlay show" @onclick="CloseSideNav"></div>
+        <div class="search-overlay"></div>
+
+        <SideBar></SideBar>
+        <div id="content" class="main-content">
+            <Notification></Notification>
+            @Body
+        </div>
+
+    </div>
+}
+
+
+
+@code{
+
+    protected override async Task OnInitializedAsync()
+    {
+        await tokenService.GetUserAsync();
+    }
+
+    private bool _collapseSideBar;
+
+    private void CollapseSideNav(bool newCollapse)
+    {
+        _collapseSideBar = newCollapse;
+
+    }
+
+
+    private void CloseSideNav()
+    {
+        _collapseSideBar = false;
+    }
+
+
+
+}

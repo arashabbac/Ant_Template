@@ -1,0 +1,16 @@
+﻿@inject NavigationManager navigation;
+
+<Result Status="404"
+        Title="404"
+        SubTitle="@Resources.DataDictionary.PageNotFound" />
+<div class="d-flex justify-content-center">
+    <Button Type="primary" OnClick="GoToIndex">@Resources.DataDictionary.ReturnToHome</Button>
+</div>
+
+@code
+{
+    void GoToIndex()
+    {
+        navigation.NavigateTo("/nationalprograms");
+    }
+}

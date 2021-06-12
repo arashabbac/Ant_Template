@@ -1,0 +1,15 @@
+﻿{
+  "name": "سامانه  جامع ارزیابی عملکرد",
+  "short_name": "سامانه  جامع ارزیابی عملکرد",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#03173d",
+  "icons": [
+    {
+      //"src": "divan-icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
