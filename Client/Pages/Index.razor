@@ -27,9 +27,23 @@
 </div>
 
 
+<div class="container mt-3">
+    <div class="card">
+        <div class="card-body">
+            <div id="barChart"></div>
+        </div>
+    </div>
+</div>
+
 @code{
     public decimal? Money { get; set; }
 
     public System.DateTime? DateTime { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(2);
+        await JsRuntime.InvokeVoidAsync("BarChartFunction");
+    }
 
 }
